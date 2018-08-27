@@ -30,7 +30,9 @@ class AccountFiscalPositionRule(models.Model):
         'res.country.state', 'Destination State',
         domain="[('country_id','=',to_shipping_country)]")
     company_id = fields.Many2one(
-        'res.company', 'Company', required=True, index=True)
+        'res.company', 'Company', required=True,
+        default=lambda self: self.env['res.company']._company_default_get(
+            'wizard.account.fiscal.position.rule'))
     fiscal_position_id = fields.Many2one(
         'account.fiscal.position', 'Fiscal Position', required=True,
         domain="[('company_id','=',company_id)]", index=True)
