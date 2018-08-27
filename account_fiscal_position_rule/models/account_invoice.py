@@ -31,3 +31,18 @@ class AccountInvoice(models.Model):
             obj_fiscal_position = self._fiscal_position_map(**kwargs)
             if obj_fiscal_position is not False:
                 self.fiscal_position_id = obj_fiscal_position.id
+
+    @api.onchange('partner_shipping_id')
+    def _onchange_partner_shipping_id(self):
+        super(AccountInvoice, self)._onchange_partner_id()
+
+        if self.partner_id and self.company_id:
+            kwargs = {
+                'company_id': self.company_id,
+                'partner_id': self.partner_id,
+                'partner_invoice_id': self.partner_id,
+                'partner_shipping_id': self.partner_shipping_id,
+            }
+            obj_fiscal_position = self._fiscal_position_map(**kwargs)
+            if obj_fiscal_position is not False:
+                self.fiscal_position_id = obj_fiscal_position.id
